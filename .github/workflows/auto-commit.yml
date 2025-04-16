@@ -1,29 +1,39 @@
+# 워크플로우 이름 설정 (GitHub Actions 페이지에 표시됨)
 name: Daily Commit
 
+# 언제 실행할지 트리거 설정
 on:
   schedule:
-    - cron: '0 0 * * *' # 매일 00:00 UTC = 한국 시간 오전 9시
-  workflow_dispatch: # 수동 실행도 가능하게
+    - cron: '0 0 * * *'  # 매일 00:00 UTC에 실행 (한국시간 오전 9시)
+  workflow_dispatch:       # GitHub Actions 페이지에서 수동 실행도 가능하게 함
 
 jobs:
-  commit:
-    runs-on: ubuntu-latest
+  commit:  # 작업(Job) 이름
+    runs-on: ubuntu-latest  # GitHub의 Ubuntu 서버에서 실행됨 (가상환경)
 
     steps:
+      # 1. 현재 저장소의 코드를 체크아웃 (다운로드)
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Git 설정 (사용자 이름과 이메일 입력)
+      #    이 정보는 자동 커밋을 남길 때 커밋 작성자 정보로 사용됨
       - name: Set up Git
         run: |
-          git config user.name "your-username"
-          git config user.email "your-email@example.com"
+          git config user.name "jeonlyung"
+          git config user.email "bindongx2@naver.com"
 
+      # 3. date.txt 파일을 현재 날짜/시간으로 업데이트
+      #    매번 이 파일 내용이 달라져야 커밋이 발생함
       - name: Update date file
         run: |
           echo "Last commit: $(date -u)" > date.txt
+          # -u 옵션은 UTC 기준 시간 출력 (예: 2025-04-17 00:00:00)
 
+      # 4. 변경 사항을 커밋하고 push
       - name: Commit changes
         run: |
-          git add date.txt
+          git add date.txt  # 변경된 파일 stage
           git commit -m "🤖 Auto daily commit on $(date -u)" || echo "No changes to commit"
-          git push
+          # 변경사항 없으면 커밋 안 하고 에러 방지용 echo 실행
+          git push  # GitHub로 커밋 푸시
