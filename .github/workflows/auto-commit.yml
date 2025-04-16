@@ -4,7 +4,7 @@ name: Daily Commit
 # 언제 실행할지 트리거 설정
 on:
   schedule:
-    - cron: '0 2 * * *'  # 매일 00:00 UTC에 실행 (한국시간 오전 9시)  11시로 수정해서 테스트
+    - cron: '0 0 * * *'  # 매일 00:00 UTC에 실행 (한국시간 오전 9시)
   workflow_dispatch:       # GitHub Actions 페이지에서 수동 실행도 가능하게 함
 
 jobs:
