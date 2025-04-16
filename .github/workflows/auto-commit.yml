@@ -23,6 +23,11 @@ jobs:
           git config user.name "jeonlyung"
           git config user.email "bindongx2@naver.com"
 
+      # 원격 저장소의 변경 사항을 가져오기
+      - name: Pull changes from remote
+        run: |
+          git pull origin main --rebase  
+          
       # 3. date.txt 파일을 현재 날짜/시간으로 업데이트
       #    매번 이 파일 내용이 달라져야 커밋이 발생함
       - name: Update date file
