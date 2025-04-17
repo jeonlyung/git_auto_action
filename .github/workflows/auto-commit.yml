@@ -5,7 +5,7 @@ name: Daily Commit
 on:
   schedule:
     - cron: '0 0 * * *'  # 매일 00:00 UTC에 실행 (한국시간 오전 9시)
-  workflow_dispatch:       # GitHub Actions 페이지에서 수동 실행도 가능하게 함
+  workflow_dispatch:     # GitHub Actions 페이지에서 수동 실행도 가능하게 함
 
 jobs:
   commit:  # 작업(Job) 이름
@@ -38,7 +38,7 @@ jobs:
       # 4. 변경 사항을 커밋하고 push
       - name: Commit changes
         run: |
-          git add date.txt  # 변경된 파일 stage
-          git commit -m "🤖 Auto daily commit on $(date -u)" || echo "No changes to commit"
-          # 변경사항 없으면 커밋 안 하고 에러 방지용 echo 실행
-          git push  # GitHub로 커밋 푸시
+          DATE=$(TZ=Asia/Seoul date +"%Y-%m-%d")
+          git add date.txt
+          git commit -m "$DATE AutoCommit 완료" || echo "No changes to commit"
+          git push
