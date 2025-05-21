@@ -5,6 +5,7 @@ name: Daily Commit
 on:
   schedule:
     - cron: '0 0 * * *'  # 매일 00:00 UTC에 실행 (한국시간 오전 9시)
+    - cron: '0 3 * * *'  # 매일 한국시간 정오 실행
   workflow_dispatch:     # GitHub Actions 페이지에서 수동 실행도 가능하게 함
 
 jobs:
@@ -38,7 +39,17 @@ jobs:
       # 4. 변경 사항을 커밋하고 push
       - name: Commit changes
         run: |
+          KST_HOUR=$(TZ=Asia/Seoul date +%H)
           DATE=$(TZ=Asia/Seoul date +"%Y-%m-%d")
+          
+          if [ "$KST_HOUR" = "09" ]; then
+            MSG="$DATE AutoCommit 완료"
+          elif [ "$KST_HOUR" = "12" ]; then
+            MSG="$DATE 차세대 프로젝트 진행중"
+          else
+            MSG="$DATE AutoCommit 완료"
+          fi
+
           git add date.txt
-          git commit -m "$DATE AutoCommit 완료" || echo "No changes to commit"
+          git commit -m "$MSG" || echo "No changes to commit"
           git push
