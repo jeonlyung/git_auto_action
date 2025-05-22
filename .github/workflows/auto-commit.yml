@@ -4,8 +4,7 @@ name: Daily Commit
 # 언제 실행할지 트리거 설정
 on:
   schedule:
-    - cron: '0 0 * * *'  # 매일 00:00 UTC에 실행 (한국시간 오전 9시)
-    - cron: '0 3 * * *'  # 매일 한국시간 정오 실행
+    - cron: '0 0 * * *'  # 매일 한국시간 오전 9시
   workflow_dispatch:     # GitHub Actions 페이지에서 수동 실행도 가능하게 함
 
 jobs:
@@ -41,16 +40,7 @@ jobs:
         run: |
           KST_HOUR=$(TZ=Asia/Seoul date +%H)
           DATE=$(TZ=Asia/Seoul date +"%Y-%m-%d")
-          
-          if [ "$KST_HOUR" = "09" ]; then
-            MSG="$DATE AutoCommit 완료"
-          elif [ "$KST_HOUR" = "12" ]; then
-            DAY=$(date +%d)
-            if [ $((10#$DAY % 2)) -ne 0 ]; then exit 0;
-            MSG="$DATE 차세대 프로젝트 진행중"
-          else
-            MSG="$DATE AutoCommit 완료"
-          fi
+          MSG="$DATE AutoCommit 완료"
 
           git add date.txt
           git commit -m "$MSG" || echo "No changes to commit"
