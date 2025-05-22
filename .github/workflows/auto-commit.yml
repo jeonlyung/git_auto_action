@@ -45,6 +45,8 @@ jobs:
           if [ "$KST_HOUR" = "09" ]; then
             MSG="$DATE AutoCommit 완료"
           elif [ "$KST_HOUR" = "12" ]; then
+            DAY=$(date +%d)
+            if [ $((10#$DAY % 2)) -ne 0 ]; then exit 0;
             MSG="$DATE 차세대 프로젝트 진행중"
           else
             MSG="$DATE AutoCommit 완료"
